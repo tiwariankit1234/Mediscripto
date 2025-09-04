@@ -1,0 +1,47 @@
+@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap");
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  font-family: Outfit;
+}
+
+.active hr {
+  @apply block;
+}
+
+::-webkit-scrollbar {
+  @apply hidden;
+}
+
+@media (max-width: 740px) {
+  .active p {
+    @apply text-white bg-primary;
+  }
+}
+
+/* Minimal global dark mode styles so ThemeProvider toggles are visible */
+:root {
+  --bg-color: #ffffff;
+  --text-color: #0f172a;
+  --card-color: #ffffff;
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  transition: background-color 200ms ease, color 200ms ease;
+}
+
+.dark body {
+  --bg-color: #0b1220; /* dark background */
+  --text-color: #e5e7eb; /* light text */
+  --card-color: #0f1724;
+}
+
+/* Example utility for cards or nav backgrounds to pick up theme */
+.themed-bg {
+  background-color: var(--card-color);
+  transition: background-color 200ms ease;
+}
