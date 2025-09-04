@@ -6,12 +6,21 @@ import connectCloudinary from "./config/cloudinary.js";
 import adminRouter from "./routes/adminRoute.js";
 import doctorRouter from "./routes/doctorRoute.js";
 import userRouter from "./routes/userRoute.js";
+import { handleStripeWebhook } from "./controllers/paymentController.js";
 
 // app config
 const app = express();
 const port = process.env.PORT || 4000;
 connectDB();
 connectCloudinary();
+
+
+// Stripe webhook needs raw body parser at the top level
+app.post(
+  "/webhook",
+  express.raw({ type: "application/json" }),
+  handleStripeWebhook
+);
 
 // middlewares
 app.use(express.json());

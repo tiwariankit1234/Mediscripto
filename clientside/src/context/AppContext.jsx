@@ -61,6 +61,7 @@ const AppContextProvider = (props) => {
   }, []);
 
   useEffect(() => {
+     console.log("token changed", token);
     if (token) {
       loadUserProfileData();
     } else {

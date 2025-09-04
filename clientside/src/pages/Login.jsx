@@ -4,7 +4,9 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
-const Login = () => {
+console.log("Login component loaded");
+ const Login = () => {
+
   const { backendUrl, token, setToken } = useContext(AppContext);
   const navigate = useNavigate();
 
@@ -16,14 +18,16 @@ const Login = () => {
 
   const onSubmitHandler = async (event) => {
     event.preventDefault();
-
     try {
+      console.log('onSubmitHandler called', { state, name, email });
       if (state === "Sign Up") {
+        console.log('calling register API', backendUrl + "/api/user/register");
         const { data } = await axios.post(backendUrl + "/api/user/register", {
           name,
           email,
           password,
         });
+        console.log('register response', data);
         if (data.success) {
           localStorage.setItem("token", data.token);
           setToken(data.token);
@@ -31,10 +35,12 @@ const Login = () => {
           toast.error(data.message);
         }
       } else {
+        console.log('calling login API', backendUrl + "/api/user/login");
         const { data } = await axios.post(backendUrl + "/api/user/login", {
           email,
           password,
         });
+        console.log('login response', data);
         if (data.success) {
           localStorage.setItem("token", data.token);
           setToken(data.token);
@@ -43,6 +49,7 @@ const Login = () => {
         }
       }
     } catch (error) {
+      console.error('auth error', error);
       toast.error(error.message);
     }
   };

@@ -88,6 +88,8 @@ const Appointment = () => {
     }
   };
 
+  // console.log("book Appointement", docId,docSlots, slotIndex, slotTime);
+  // console.log("token",token);
   const bookAppointment = async () => {
     if (!token) {
       toast.warn("Login to book appointment");
@@ -102,6 +104,7 @@ const Appointment = () => {
       let year = date.getFullYear();
 
       const slotDate = day + "_" + month + "_" + year;
+      // console.log("data",data);
 
       const { data } = await axios.post(
         backendUrl + "/api/user/book-appointment",
@@ -111,6 +114,7 @@ const Appointment = () => {
       if (data.success) {
         toast.success(data.message);
         getDoctorsData();
+        // redirect to My Appointments where user can Pay Online
         navigate("/my-appointments");
       } else {
         toast.error(data.message);

@@ -55,10 +55,33 @@ const MyAppointments = () => {
       );
       if (data.success) {
         toast.success(data.message);
+        // optimistically update UI so 'Appointment cancelled' shows immediately
+        setAppointments((prev) =>
+          prev.map((a) => (String(a._id) === String(appointmentId) ? { ...a, cancelled: true } : a))
+        );
+        // refresh data in background
         getUserAppointments();
         getDoctorsData();
       } else {
         toast.error(data.message);
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error(error.message);
+    }
+  };
+
+  const payOnline = async (appointment) => {
+    try {
+      const { data } = await axios.post(
+        backendUrl + "/api/user/create-checkout-session",
+        { amount: appointment.amount || appointment.docData.fees, appointmentId: appointment._id },
+        { headers: { token } }
+      );
+      if (data.success && data.url) {
+        window.location.href = data.url;
+      } else {
+        toast.error("Failed to initiate payment");
       }
     } catch (error) {
       console.log(error);
@@ -79,6 +102,8 @@ const MyAppointments = () => {
       </p>
       <div>
         {appointments.map((item, index) => (
+          console.log(item),
+
           <div
             className="grid grid-cols-[1fr_2fr] gap-4 sm:flex sm:gap-6 py-2 border-b"
             key={index}
@@ -107,9 +132,14 @@ const MyAppointments = () => {
             </div>
             <div></div>
             <div className="flex flex-col gap-2 justify-end">
-              {!item.cancelled && !item.isCompleted && (
-                <button className="text-sm text-stone-500 text-center sm:min-w-48 py-2 border rounded hover:bg-primary hover:text-white transition-all duration-300">
+              {!item.cancelled && !item.isCompleted && !item.payment && (
+                <button onClick={() => payOnline(item)} className="text-sm text-stone-500 text-center sm:min-w-48 py-2 border rounded hover:bg-primary hover:text-white transition-all duration-300">
                   Pay Online
+                </button>
+              )}
+              {item.payment && (
+                <button className="sm:min-w-48 py-2 border border-green-500 rounded text-green-500">
+                  Paid
                 </button>
               )}
               {!item.cancelled && !item.isCompleted && (
