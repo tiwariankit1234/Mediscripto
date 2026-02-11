@@ -8,9 +8,6 @@ const authAdmin = async (req, res, next) => {
         if (!atoken) {
             return res.json({ success: false, message: "Not Authorized Login Again" });
         }
-        console.log("🔥 authAdmin.js middleware triggered!");
-        console.log("📋 Token received:", atoken);
-        console.log("⏰ Timestamp:", new Date().toLocaleString());
         const token_decode = jwt.verify(atoken, process.env.JWT_SECRET);
 
         if (token_decode !== process.env.ADMIN_EMAIL + process.env.ADMIN_PASSWORD) {
