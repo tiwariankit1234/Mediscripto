@@ -1,4 +1,4 @@
-import natural from "natural";
+import * as natural from "natural";
 
 // Consolidated FAQ list
 const FAQS = [

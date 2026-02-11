@@ -50,7 +50,7 @@ export default function FaqChat() {
         </div>
       )}
   {/* Integrated chatbot UI */}
-  <Chatbot />
+  {/* <Chatbot /> */}
     </div>
   );
 }
