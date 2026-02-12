@@ -24,7 +24,14 @@ app.post(
 
 // middlewares
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+  origin: [
+    "http://localhost:5173",
+    "https://purple-river-01f4f0400.6.azurestaticapps.net"
+  ],
+  credentials: true
+}));
+
 
 // api endpoints
 app.use("/api/admin", adminRouter);
